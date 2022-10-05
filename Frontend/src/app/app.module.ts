@@ -8,14 +8,23 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { InvoiceComponent } from './components/invoice/invoice.component';
+import { InvoiceDetailsComponent } from './components/invoice-details/invoice-details.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 let material : any = [
 
 ]
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    InvoiceComponent,
+    InvoiceDetailsComponent,
+    NavBarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
