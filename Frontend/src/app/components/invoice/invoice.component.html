@@ -1,1 +1,104 @@
-<p>invoice works!</p>
+<div class="container">
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="search" class="col-form-label">Search:</label>
+        </div>
+        <div class="col-auto">
+            <input id="search" class="form-control me-2" type="search" placeholder="Search by invoice ID" aria-label="Search"
+                [(ngModel)]="search">
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-success" (click)="invoiceSearch()">Search</button>
+        </div>
+    </div>
+
+    <mat-divider *ngIf="invoice" class="my-3"></mat-divider>
+
+    <div *ngIf="invoice">
+        <h1>Invocie</h1>
+
+        <div class="row g-5 align-items-center">
+            <div class="col-1">
+                <label for="customerName" class="col-form-label">Customer Name</label>
+            </div>
+            <div class="col-4">
+                <input class="form-control me-2" type="text" placeholder="Customer Name"
+                    [(ngModel)]="invoice.customerName">
+            </div>
+            <div class="col-auto d-flex">
+                <button class="btn btn-info mx-2 invoiceBtn d-flex align-items-center">
+                    <span class="px-2">Add Invoice</span>
+                    <mat-icon aria-hidden="false" fontIcon="add"></mat-icon>
+                </button>
+                <button class="btn btn-secondary invoiceBtn d-flex align-items-center">
+                    <span class="px-2">Clear Invoice</span>
+                    <mat-icon aria-hidden="false" fontIcon="clearAll"></mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-5 align-items-center mb-5">
+            <div class="col-1">
+                <label for="date" class="col-form-label">Date</label>
+            </div>
+            <div class="col-4">
+                <input class="form-control me-2" type="text" placeholder="Date" disabled
+                    [value]="invoice.date | date:'medium'">
+            </div>
+            <div class="col-4 d-flex">
+                <button class="btn btn-danger mx-2 invoiceBtn d-flex align-items-center">
+                    <span class="px-2">Delete Invoice</span>
+                    <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
+                </button>
+                <button class="btn btn-warning invoiceBtn d-flex align-items-center">
+                    <span class="px-2">Update Invoice</span>
+                    <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
+                </button>
+            </div>
+        </div>
+        
+        <!-- <div class="row py-2">
+            <div class="col-4 row">
+                <mat-form-field class="inputWidth" appearance="outline">
+                    <mat-label>Customer Name</mat-label>
+                    <input matInput maxlength="50" placeholder="Customer name" [(ngModel)]="invoice.customerName">
+                </mat-form-field>
+            </div>
+        </div> -->
+
+        <!-- <div class="row py-2">
+            <div class="col-4 row d-flex">
+                <span class="mr-4">Date</span>
+                <span> {{invoice.date | date : 'medium'}} </span>
+            </div>
+            <div class="col-8 d-flex">
+                <button class="btn btn-danger mx-2 invoiceBtn">
+                    <div>Delete Invoice</div>
+                    <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
+                </button>
+                <button class="btn btn-warning invoiceBtn">
+                    <div>Update Invoice</div>
+                    <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
+                </button>
+            </div>
+        </div> -->
+        <!-- <mat-divider *ngIf="invoice" class="my-3"></mat-divider> -->
+        <h2>Invoice details</h2>
+        <app-invoice-details [invoiceDetails]="invoice"></app-invoice-details>
+
+        <!-- <div class="d-flex me-2">
+            <div class="py-2">
+                <mat-form-field class="inputWidth" appearance="fill">
+                    <mat-label>Total Qty</mat-label>
+                    <input matInput placeholder="Total Qty" disabled [(ngModel)]="invoice.totalQty">
+                </mat-form-field>
+            </div>
+            <div class="py-2">
+                <mat-form-field class="inputWidth" appearance="fill">
+                    <mat-label>Total price</mat-label>
+                    <input matInput placeholder="Total price" disabled [(ngModel)]="invoice.totalPrice">
+                </mat-form-field>
+            </div>
+        </div> -->
+    </div>
+</div>

@@ -12,10 +12,24 @@ import { InvoiceComponent } from './components/invoice/invoice.component';
 import { InvoiceDetailsComponent } from './components/invoice-details/invoice-details.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatInputModule} from '@angular/material/input';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatIconModule} from '@angular/material/icon';
+import { MatRippleModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table'  
+import { MatSortModule } from '@angular/material/sort';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 let material : any = [
-
+  MatInputModule,
+  MatDividerModule,
+  MatIconModule,
+  MatRippleModule,
+  MatTableModule,
+  MatSortModule,
+  MatCheckboxModule,
 ]
 
 @NgModule({
@@ -24,7 +38,7 @@ let material : any = [
     InvoiceComponent,
     InvoiceDetailsComponent,
     NavBarComponent,
-    FooterComponent
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,6 +48,7 @@ let material : any = [
     RouterModule,
     HttpClientModule,
     FormsModule,
+    NgbModule,
     ...material
   ],
   providers: [],

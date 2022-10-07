@@ -11,7 +11,12 @@ builder.Services.AddControllers();
 
 //connecting to DB
 builder.Services.AddDbContext<SalesDbContext>(
-    db => db.UseSqlServer( builder.Configuration.GetConnectionString("myCon") ) 
+    db => db.UseLazyLoadingProxies().UseSqlServer( builder.Configuration.GetConnectionString("myCon") ) 
+);
+
+//allow lazy load
+builder.Services.AddControllers().AddNewtonsoftJson(
+    x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
 
 //CORS

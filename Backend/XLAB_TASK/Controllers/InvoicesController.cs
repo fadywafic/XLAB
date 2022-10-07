@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using XLAB_TASK.Models;
 
-namespace XLAB_TASK
+namespace XLAB_TASK.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -80,7 +80,7 @@ namespace XLAB_TASK
             _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetInvoice", new { id = invoice.id }, invoice);
+            return CreatedAtAction("GetInvoice", new { invoice.id }, invoice);
         }
 
         // DELETE: api/Invoices/5
