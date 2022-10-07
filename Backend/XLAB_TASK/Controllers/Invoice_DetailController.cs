@@ -20,58 +20,6 @@ namespace XLAB_TASK.Controllers
             _context = context;
         }
 
-        //// GET: api/Invoice_Detail
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Invoice_Detail>>> GetInvoice_Details()
-        //{
-        //    return await _context.Invoice_Details.ToListAsync();
-        //}
-
-        //// GET: api/Invoice_Detail/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Invoice_Detail>> GetInvoice_Detail(string id)
-        //{
-        //    var invoice_Detail = await _context.Invoice_Details.FindAsync(id);
-
-        //    if (invoice_Detail == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return invoice_Detail;
-        //}
-
-        //// PUT: api/Invoice_Detail/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutInvoice_Detail(string id, Invoice_Detail invoice_Detail)
-        //{
-        //    if (id != invoice_Detail.itemName)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(invoice_Detail).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!Invoice_DetailExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         // POST: api/Invoice_Detail
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

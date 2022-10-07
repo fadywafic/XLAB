@@ -30,6 +30,7 @@ export class InvoiceComponent implements OnInit {
         this.isLoadingResults = false
       },
       error: (error) => {
+        this.isLoadingResults = false
         this.invoice = undefined
         this.service.showError('This Customer ID don\'t exist')
         console.log('error in search invoice', error)

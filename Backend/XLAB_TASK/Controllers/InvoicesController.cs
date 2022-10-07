@@ -53,9 +53,15 @@ namespace XLAB_TASK.Controllers
 
             _context.Entry(invoice).State = EntityState.Modified;
 
-            var itemsInDb = _context.Invoice_Details.Where(e => e.invoiceId == invoice.id).ToList();
-            var incommonItems = invoice.Invoice_Details.Except(itemsInDb).ToList();
-            _context.Invoice_Details.AddRange(incommonItems);
+            var items = invoice.Invoice_Details.ToArray();
+            for (int i=0; i< items.Length; i++)
+            {
+                _context.Invoice_Details.Update(items[i]);
+            }
+
+            //var itemsInDb = _context.Invoice_Details.Where(e => e.invoiceId == invoice.id).ToList();
+            //var incommonItems = invoice.Invoice_Details.Except(itemsInDb).ToList();
+            //_context.Invoice_Details.UpdateRange(incommonItems);
 
             try
             {
