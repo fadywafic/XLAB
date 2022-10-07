@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ServiceService } from 'src/app/service.service';
 
 export interface InvoiceDetails {
@@ -17,60 +17,132 @@ export interface InvoiceDetails {
 })
 export class InvoiceDetailsComponent implements OnInit, OnChanges {
 
-  @Input('invoiceDetails') data :any
-  @ViewChild(MatTable) table :any;
+  @Input('invoiceDetails') details: any
+
+  @ViewChild(MatTable) table: any;
   @ViewChild(MatSort) sort: any;
 
-  constructor(private service : ServiceService) { }
+  @Output() updatingInvoiceDetails = new EventEmitter<InvoiceDetails>();
+  constructor(private service: ServiceService) { }
 
-  invoice :any
-  dataSource :any
+  invoice: any
+  invoiceId:any
+  dataSource: any
   selection = new SelectionModel<InvoiceDetails>(true, []);
+
+  newItem = {
+    itemName: '',
+    itemQty: '',
+    itemPrice: '',
+    itemTotalPrice: undefined,
+    invoiceId: undefined
+  }
 
   ngOnInit(): void {
     this.createTable()
   }
 
-  ngOnChanges(){
-    this.invoice = this.data
+  ngOnChanges() {
+    this.invoice = this.details
+    if(this.dataSource && this.dataSource.data) this.dataSource.data = this.invoice;
     console.log('data', this.invoice)
   }
-  displayedColumns: string[] = ['select','itemName', 'itemQty', 'itemPrice', 'itemTotalPrice'];
+  displayedColumns: string[] = ['itemName', 'itemQty', 'itemPrice', 'itemTotalPrice','options'];
 
   createTable() {
-    let tableArr: InvoiceDetails[] = this.invoice.invoice_Details
+    let tableArr: InvoiceDetails[] = this.invoice
     this.dataSource = new MatTableDataSource(tableArr);
     this.dataSource.sort = this.sort;
   }
 
+  isValidItem(createdData:any){
+    let validationArray =[]
+    let state = true
 
-  addData() {
-    const randomElementIndex = Math.floor(Math.random() * this.invoice.invoice_Details.length);
-    this.dataSource.push(this.invoice.invoice_Details[randomElementIndex]);
-    this.table.renderRows();
+    if(!createdData.itemName || !createdData.itemQty || !createdData.itemPrice){
+      this.service.showError('Incomplete Data')
+      return false;
+    }
+
+    if(createdData.itemName){
+      const name = new RegExp('^[a-zA-Z]{0,50}$','i')
+      state = name.test(createdData.itemName)
+      if(!state)  validationArray.push('Invalid item name \n')
+      if(this.dataSource.data.find((item:any) => { return item.itemName == createdData.itemName } )){
+        this.service.showError('This item already exists')
+      return false;
+      }
+    }
+
+    if(createdData.itemPrice){
+      const price = new RegExp('^[0-9]+$','i')
+      state = price.test(createdData.itemPrice)
+      if(!state)  validationArray.push('Invalid item price \n')
+    }
+
+    if(createdData.itemQty){
+      const qty = new RegExp('^[0-9]+$','i')
+      state = qty.test(createdData.itemQty)
+      if(!state)  validationArray.push('Invalid item quantity \n')
+      // var result = (createdData.itemQty - Math. floor(createdData.itemQty)) !== 0; 
+      // if (result){
+      //   state = false
+      //   validationArray.push('Invalid item quantity \n')
+      // }
+    }
+
+    if(!state){
+      this.service.showError(validationArray.join(' - '))
+    }
+
+    return state
   }
 
-  removeData() {
-    let promiseArray = []
-    this.selection.selected.map(item => {
-      promiseArray.push(this.service.deleteItem(item.itemName, this.invoice.id).subscribe({
-        next: ()=>{
-          this.table.renderRows();
-        },
-        error: (err) => {
-          console.log('error in delete item',err)
-          this.service.showError('can\'t delete these items try again later')
-        }
-      })) 
-    })
+  addItem() {
+    if(!this.isValidItem(this.newItem)) return;
+
+    let body = {
+      itemName: this.newItem.itemName,
+      itemQty: +this.newItem.itemQty,
+      itemPrice: +this.newItem.itemPrice,
+      itemTotalPrice: +this.newItem.itemPrice * +this.newItem.itemQty,
+    }
+
+    // this.service.AddItem(body).subscribe({
+    //   next: () => {
+      this.dataSource.data.push(body)
+      this.updatingInvoiceDetails.emit(this.dataSource.data)
+      this.table.renderRows();
+      this.newItem.itemName = this.newItem.itemQty = this.newItem.itemPrice = ''
+    //   },
+    //   error: (err) => {
+    //     console.log('error in add item', err)
+    //     this.service.showError('can\'t add this item, try again later')
+    //   }
+    // })
+  }
+
+  removeItem(item:any) {
+    // this.service.deleteItem(item.itemName, this.invoice.invoiceId).subscribe({
+    //   next: () => {
+      let index = this.dataSource.data.findIndex((i:any) => i == item)
+      this.dataSource.data.splice( index ,1)
+      this.updatingInvoiceDetails.emit(this.dataSource.data)
+      this.table.renderRows();
+      // },
+      // error: (err) => {
+      //   console.log('error in delete item', err)
+      //   this.service.showError('can\'t delete this item, try again later')
+      // }
+    // })
   }
 
   getTotalCost() {
-    return this.invoice.invoice_Details.map( (item:any) => item.itemTotalPrice).reduce((acc:any, value:any) => acc + value, 0);
+    return this.invoice.map((item: any) => +item.itemTotalPrice).reduce((acc: any, value: any) => acc + value, 0);
   }
 
   getTotalQty() {
-    return this.invoice.invoice_Details.map( (item:any) => item.itemQty).reduce((acc:any, value:any) => acc + value, 0);
+    return this.invoice.map((item: any) => +item.itemQty).reduce((acc: any, value: any) => acc + value, 0);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

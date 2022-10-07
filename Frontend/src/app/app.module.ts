@@ -20,6 +20,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatTableModule } from '@angular/material/table'  
 import { MatSortModule } from '@angular/material/sort';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 let material : any = [
@@ -30,6 +31,7 @@ let material : any = [
   MatTableModule,
   MatSortModule,
   MatCheckboxModule,
+  MatProgressSpinnerModule
 ]
 
 @NgModule({

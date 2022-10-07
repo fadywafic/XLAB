@@ -8,97 +8,73 @@
                 [(ngModel)]="search">
         </div>
         <div class="col-auto">
-            <button class="btn btn-outline-success" (click)="invoiceSearch()">Search</button>
+            <button class="btn btn-outline-success mr-2" (click)="invoiceSearch()">Search</button>
         </div>
+        <!-- <div class="col-auto">
+            <button class="btn btn-outline-info " (click)="toggleInvoice()">{{ btnText }}</button>
+        </div> -->
     </div>
 
     <mat-divider *ngIf="invoice" class="my-3"></mat-divider>
 
-    <div *ngIf="invoice">
-        <h1>Invocie</h1>
-
-        <div class="row g-5 align-items-center">
-            <div class="col-1">
-                <label for="customerName" class="col-form-label">Customer Name</label>
-            </div>
-            <div class="col-4">
-                <input class="form-control me-2" type="text" placeholder="Customer Name"
-                    [(ngModel)]="invoice.customerName">
-            </div>
-            <div class="col-auto d-flex">
-                <button class="btn btn-info mx-2 invoiceBtn d-flex align-items-center">
-                    <span class="px-2">Add Invoice</span>
-                    <mat-icon aria-hidden="false" fontIcon="add"></mat-icon>
-                </button>
-                <button class="btn btn-secondary invoiceBtn d-flex align-items-center">
-                    <span class="px-2">Clear Invoice</span>
-                    <mat-icon aria-hidden="false" fontIcon="clearAll"></mat-icon>
-                </button>
-            </div>
+    <div class="d-flex align-content-center align-content-center mt-4">
+        <div *ngIf="isLoadingResults">
+          <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
         </div>
+    </div>
 
-        <div class="row g-5 align-items-center mb-5">
-            <div class="col-1">
-                <label for="date" class="col-form-label">Date</label>
+    <div *ngIf="invoice || showOrHideInvoice">
+        <h1>Invoice</h1>
+
+        <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <div class="row mb-2">
+                    <div class="col-lg-2 col-sm-12">
+                        <label for="customerName" class="col-form-label">Customer Name</label>
+                    </div>
+                    <div class="col-lg-8 col-sm-12">
+                        <input class="form-control me-2" type="text" placeholder="Customer Name"
+                            [(ngModel)]="invoice.customerName">
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <div class="col-lg-2 col-sm-12">
+                        <label for="date" class="col-form-label">Date</label>
+                    </div>
+                    <div class="col-lg-8 col-sm-12">
+                        <input class="form-control me-2" type="text" placeholder="Date" disabled
+                            [value]="invoice.date | date:'MMM dd yyyy'">
+                    </div>
+                </div>
             </div>
-            <div class="col-4">
-                <input class="form-control me-2" type="text" placeholder="Date" disabled
-                    [value]="invoice.date | date:'medium'">
-            </div>
-            <div class="col-4 d-flex">
-                <button class="btn btn-danger mx-2 invoiceBtn d-flex align-items-center">
-                    <span class="px-2">Delete Invoice</span>
-                    <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
-                </button>
-                <button class="btn btn-warning invoiceBtn d-flex align-items-center">
-                    <span class="px-2">Update Invoice</span>
-                    <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
-                </button>
+    
+            <div class="d-flex flex-column col-lg-6 col-sm-12">
+                <div class="col-auto d-flex mb-4">
+                    <button class="btn btn-info mx-2 invoiceBtn d-flex align-items-center" (click)="addInvoice()">
+                        <span class="px-2">Add Invoice</span>
+                        <mat-icon aria-hidden="false" fontIcon="add"></mat-icon>
+                    </button>
+                    <button class="btn btn-secondary invoiceBtn d-flex align-items-center" (click)="clear()">
+                        <span class="px-2">Clear Invoice</span>
+                        <mat-icon aria-hidden="false" fontIcon="clearAll"></mat-icon>
+                    </button>
+                </div>
+                <div class="col-auto d-flex mb-3">
+                    <button class="btn btn-danger mx-2 invoiceBtn d-flex align-items-center"(click)="deleteInvoice()">
+                        <span class="px-2">Delete Invoice</span>
+                        <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
+                    </button>
+                    <button class="btn btn-warning invoiceBtn d-flex align-items-center" (click)="updateInvoice()">
+                        <span class="px-2">Update Invoice</span>
+                        <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
+                    </button>
+                </div>
             </div>
         </div>
         
-        <!-- <div class="row py-2">
-            <div class="col-4 row">
-                <mat-form-field class="inputWidth" appearance="outline">
-                    <mat-label>Customer Name</mat-label>
-                    <input matInput maxlength="50" placeholder="Customer name" [(ngModel)]="invoice.customerName">
-                </mat-form-field>
-            </div>
-        </div> -->
-
-        <!-- <div class="row py-2">
-            <div class="col-4 row d-flex">
-                <span class="mr-4">Date</span>
-                <span> {{invoice.date | date : 'medium'}} </span>
-            </div>
-            <div class="col-8 d-flex">
-                <button class="btn btn-danger mx-2 invoiceBtn">
-                    <div>Delete Invoice</div>
-                    <mat-icon aria-hidden="false" fontIcon="delete"></mat-icon>
-                </button>
-                <button class="btn btn-warning invoiceBtn">
-                    <div>Update Invoice</div>
-                    <mat-icon aria-hidden="false" fontIcon="edit"></mat-icon>
-                </button>
-            </div>
-        </div> -->
-        <!-- <mat-divider *ngIf="invoice" class="my-3"></mat-divider> -->
         <h2>Invoice details</h2>
-        <app-invoice-details [invoiceDetails]="invoice"></app-invoice-details>
+        <app-invoice-details [invoiceDetails]="invoice.invoice_Details" (updatingInvoiceDetails)="updateInvoiceDetails($event)" ></app-invoice-details>
 
-        <!-- <div class="d-flex me-2">
-            <div class="py-2">
-                <mat-form-field class="inputWidth" appearance="fill">
-                    <mat-label>Total Qty</mat-label>
-                    <input matInput placeholder="Total Qty" disabled [(ngModel)]="invoice.totalQty">
-                </mat-form-field>
-            </div>
-            <div class="py-2">
-                <mat-form-field class="inputWidth" appearance="fill">
-                    <mat-label>Total price</mat-label>
-                    <input matInput placeholder="Total price" disabled [(ngModel)]="invoice.totalPrice">
-                </mat-form-field>
-            </div>
-        </div> -->
     </div>
-</div>
+    

@@ -53,6 +53,10 @@ namespace XLAB_TASK.Controllers
 
             _context.Entry(invoice).State = EntityState.Modified;
 
+            var itemsInDb = _context.Invoice_Details.Where(e => e.invoiceId == invoice.id).ToList();
+            var incommonItems = invoice.Invoice_Details.Except(itemsInDb).ToList();
+            _context.Invoice_Details.AddRange(incommonItems);
+
             try
             {
                 await _context.SaveChangesAsync();

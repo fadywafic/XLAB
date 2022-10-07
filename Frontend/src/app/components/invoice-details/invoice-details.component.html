@@ -1,16 +1,38 @@
 <div class="demo-button-container">
-    <button mat-raised-button (click)="addData()" class="demo-button btn btn-dark">
-        Add Item
-    </button>
-    <button [disabled]="!selection.selected.length" mat-raised-button (click)="removeData()"
+    <!-- <button [disabled]="!selection.selected.length" mat-raised-button (click)="removeData()"
         class="demo-button btn btn-dark">
         Remove selected Items
-    </button>
+    </button> -->
+    <div class="row py-2">
+        <div class="col-lg-3 col-sm-12 col-md-12 row">
+            <mat-form-field class="inputWidth" appearance="outline">
+                <mat-label>Item Name</mat-label>
+                <input matInput maxlength="50" placeholder="Item name" [(ngModel)]="newItem.itemName">
+            </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-sm-12 col-md-12 row">
+            <mat-form-field class="inputWidth" appearance="outline">
+                <mat-label>Item Qty</mat-label>
+                <input matInput maxlength="50" placeholder="Item Qty" [(ngModel)]="newItem.itemQty">
+            </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-sm-12 col-md-12 row">
+            <mat-form-field class="inputWidth" appearance="outline">
+                <mat-label>Item Price</mat-label>
+                <input matInput maxlength="50" placeholder="Item Price" [(ngModel)]="newItem.itemPrice">
+            </mat-form-field>
+        </div>
+        <div class="col-lg-3 col-sm-12 col-md-12 row btn-large invoiceBtn d-flex align-items-lg-start py-2">
+            <button mat-raised-button (click)="addItem()" class="demo-button btn btn-dark">
+                Add Item
+            </button>
+        </div>
+    </div>
 </div>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
     <!-- Checkbox Column -->
-    <ng-container matColumnDef="select">
+    <!-- <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
                 [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
@@ -22,7 +44,7 @@
             </mat-checkbox>
         </td>
         <td mat-footer-cell *matFooterCellDef>{{selection.selected.length}} Selected Items</td>
-    </ng-container>
+    </ng-container> -->
 
     <!-- Name Column -->
     <ng-container matColumnDef="itemName">
@@ -52,14 +74,14 @@
         <td mat-footer-cell *matFooterCellDef> {{ getTotalCost() | currency}} </td>
     </ng-container>
 
-    <!-- <ng-container matColumnDef="options">
+    <ng-container matColumnDef="options">
         <th mat-header-cell *matHeaderCellDef>Options</th>
         <td mat-cell *matCellDef="let element">
-            <button class="btn btn-warning mr-2">update Item</button>
-            <button class="btn btn-danger">delete Item</button>
+            <!-- <button class="btn btn-warning mr-2">update Item</button> -->
+            <button class="btn btn-danger" (click)="removeItem(element)">delete Item</button>
         </td>
         <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container> -->
+    </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

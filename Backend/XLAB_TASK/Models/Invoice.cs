@@ -23,9 +23,6 @@ namespace XLAB_TASK.Models
         public string customerName { get; set; }
         [Column(TypeName = "date")]
         public DateTime? date { get; set; }
-        public short totalQty { get; set; }
-        [Column(TypeName = "money")]
-        public decimal totalPrice { get; set; }
 
         [InverseProperty("invoice")]
         public virtual ICollection<Invoice_Detail> Invoice_Details { get; set; }
